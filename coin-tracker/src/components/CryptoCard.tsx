@@ -1,8 +1,5 @@
 import React from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Typography from '@mui/material/Typography';
+import { Card, CardContent, Typography } from '@mui/material';
 
 interface CryptoCardProps {
     name: string;
@@ -12,27 +9,18 @@ interface CryptoCardProps {
     logo: string;
 }
 
-export default function CryptoCard({
-                                       name,
-                                       rank,
-                                       priceUsd,
-                                       changePercent24Hr,
-                                       logo,
-                                   }: CryptoCardProps) {
+const CryptoCard: React.FC<CryptoCardProps> = ({ name, rank, priceUsd, changePercent24Hr, logo }) => {
     return (
         <Card>
-            <CardMedia
-                component="img"
-                alt={`${name} logo`}
-                height="140"
-                image={logo}
-            />
             <CardContent>
+                <img src={logo} alt={name} style={{ width: '50px', height: '50px' }} />
                 <Typography variant="h5">{name}</Typography>
-                <Typography variant="body2">Rank: {rank}</Typography>
-                <Typography variant="body2">Price: ${Number(priceUsd).toFixed(7)}</Typography>
-                <Typography variant="body2">24h Change: {Number(changePercent24Hr).toFixed(2)}%</Typography>
+                <Typography variant="body1">Rank: {rank}</Typography>
+                <Typography variant="body1">Price: ${priceUsd}</Typography>
+                <Typography variant="body1">Change (24h): {changePercent24Hr}%</Typography>
             </CardContent>
         </Card>
     );
-}
+};
+
+export default CryptoCard;
