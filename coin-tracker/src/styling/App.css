@@ -2,7 +2,16 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Inter', sans-serif;
-  background: linear-gradient(to bottom, #80DEEA, #E0F7FA); /* Gradient from Cyan 200 */
+  background: linear-gradient(to Right, #80DEEA, #E0F7FA); /* Gradient from Cyan 200 */
   background-repeat: no-repeat;
   background-attachment: fixed;
+}
+
+.Contracker {
+  display: block; /* Makes sure it's treated as a block-level element */
+  text-align: center; /* Corrected typo */
+  font-size: 5rem; /* You can adjust this size */
+  font-weight: bold;
+  margin-top: 20px; /* Adds some space at the top */
+  color: #333; /* You can adjust the color */
 }

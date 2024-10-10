@@ -9,15 +9,17 @@ interface CryptoCardProps {
     logo: string;
 }
 
-const CryptoCard: React.FC<CryptoCardProps> = ({ name, rank, priceUsd, changePercent24Hr, logo }) => {
+const CryptoCard: React.FC<CryptoCardProps> = ({name, rank, priceUsd, changePercent24Hr, logo}) => {
     return (
-        <Card>
+        <Card style={{borderRadius: '15px', textAlign: "center"}}>
             <CardContent>
-                <img src={logo} alt={name} style={{ width: '50px', height: '50px' }} />
-                <Typography variant="h5">{name}</Typography>
-                <Typography variant="body1">Rank: {rank}</Typography>
-                <Typography variant="body1">Price: ${priceUsd}</Typography>
-                <Typography variant="body1">Change (24h): {changePercent24Hr}%</Typography>
+                <img src={logo} alt={name} style={{width: '50px', height: '50px'}}/>
+                <Typography variant="h5"><strong>{name}</strong></Typography>
+                <Typography variant="body1"><strong>Rank:</strong> {rank}</Typography>
+                <Typography variant="body1"><strong>Price:</strong> ${priceUsd}</Typography>
+                <Typography variant="body1"><strong>Change (24h):</strong><span
+                    style={{color: 'red'}}>{changePercent24Hr}%</span></Typography>
+                <p><span style={{fontSize: '12px'}}>24-hour period</span></p>
             </CardContent>
         </Card>
     );

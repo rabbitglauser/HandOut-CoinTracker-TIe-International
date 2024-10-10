@@ -6,6 +6,7 @@ import CryptoCard from './components/CryptoCard'; // Assuming you have a CryptoC
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import theme from './theme/theme';
 import './styling/App.css'; // Ensure path is correct
+import { Box, Typography } from '@mui/material';
 
 interface Crypto {
     id: string;
@@ -46,10 +47,12 @@ export default function App() {
         return () => clearInterval(interval);
     }, []);
 
+
     return (
         <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <Container style={{ paddingTop: '20px' }}>
+            <CssBaseline/>
+            <strong className="Contracker">COINTRACKER</strong>
+            <Container style={{paddingTop: '20px'}}>
                 <Grid container spacing={3}>
                     {error && <p>{error}</p>}
                     {cryptos.length === 0 ? (
