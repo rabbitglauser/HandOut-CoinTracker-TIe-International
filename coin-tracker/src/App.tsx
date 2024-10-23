@@ -1,11 +1,13 @@
+/* creating a coin-tracker which allows you to see the different prices of coins in real time.I personally used React typescript, Mui, and a bit of HTML*/
+/* all the different imports I used*/
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
-import CryptoCard from './components/CryptoCard'; // Assuming you have a CryptoCard component
+import CryptoCard from './components/CryptoCard';
 import { ThemeProvider, CssBaseline } from '@mui/material';
 import theme from './theme/theme';
-import './styling/App.css'; // Ensure path is correct
+import './styling/App.css';
 import { Box, Typography } from '@mui/material';
 
 /**
@@ -81,13 +83,24 @@ export default function App() {
                                     priceUsd={Number(crypto.priceUsd).toFixed(2)}
                                     changePercent24Hr={Number(crypto.changePercent24Hr).toFixed(2)}
                                     logo={logoMap[crypto.id]}
+                                    /*planning to add here a dropdown to chose other cryptos here */
+                                    /*<Select
+                                        labelId="select-label"
+                                        value={selectedValue}
+                                        label="Options"
+                                        onChange={handleChange}
+                                        >
+                                            <MenuItem value={10}>Option 1</MenuItem>
+                                        <MenuItem value={20}>Option 2</MenuItem>
+                                        <MenuItem value={30}>Option 3</MenuItem>
+                                    </Select>*/
                                 />
                             </Grid>
                         ))
                     )}
                 </Grid>
             </Container>
-            <div className="sea">
+             <div className="sea">
                 <div className="circle-wrapper">
                     <div className="bubble"></div>
                     <div className="submarine-wrapper">
