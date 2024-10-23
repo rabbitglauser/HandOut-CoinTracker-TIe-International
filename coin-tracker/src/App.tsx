@@ -8,6 +8,10 @@ import theme from './theme/theme';
 import './styling/App.css'; // Ensure path is correct
 import { Box, Typography } from '@mui/material';
 
+/**
+ * Represents a cryptocurrency with properties including its ID, name, rank, price in USD,
+ * and percentage change in the past 24 hours.
+ */
 interface Crypto {
     id: string;
     name: string;
@@ -17,12 +21,20 @@ interface Crypto {
 }
 
 // Updated logoMap without .default
+/**
+ * Represents a mapping of string keys to string values where each key corresponds an image file path.
+ * The logoMap object is used to store paths to image files for different cryptocurrencies.
+ */
 const logoMap: { [key: string]: string } = {
     bitcoin: require('./assets/bitcoin.png'),
     ethereum: require('./assets/ethereum.png'),
     tether: require('./assets/tether.png'),
 };
 
+/**
+ * Function that fetches cryptocurrency data from an external API and displays it in a styled component.
+ * @returns JSX element that contains a list of selected cryptocurrencies with their respective details.
+ */
 export default function App() {
     const [cryptos, setCryptos] = useState<Crypto[]>([]);
     const [error, setError] = useState<string | null>(null);
@@ -31,7 +43,7 @@ export default function App() {
         const fetchCryptos = async () => {
             try {
                 const response = await axios.get('https://api.coincap.io/v2/assets');
-                console.log(response.data.data); // Log API data
+                console.log(response.data.data);
                 const filteredCryptos = response.data.data
                     .filter((crypto: Crypto) => ['bitcoin', 'ethereum', 'tether'].includes(crypto.id))
                     .sort((a: Crypto, b: Crypto) => a.rank - b.rank);
@@ -47,12 +59,15 @@ export default function App() {
         return () => clearInterval(interval);
     }, []);
 
-
     return (
         <ThemeProvider theme={theme}>
-            <CssBaseline/>
-            <strong className="Contracker">COINTRACKER</strong>
-            <Container style={{paddingTop: '20px'}}>
+            <CssBaseline />
+            <ul className="Contracker">
+                {Array.from('COINTRACKER').map((letter, index) => (
+                    <li key={index}>{letter}</li>
+                ))}
+            </ul>
+            <Container style={{ paddingTop: '20px' }}>
                 <Grid container spacing={3}>
                     {error && <p>{error}</p>}
                     {cryptos.length === 0 ? (
@@ -72,6 +87,25 @@ export default function App() {
                     )}
                 </Grid>
             </Container>
+            <div className="sea">
+                <div className="circle-wrapper">
+                    <div className="bubble"></div>
+                    <div className="submarine-wrapper">
+                        <div className="submarine-body">
+                            <div className="window"></div>
+                            <div className="engine"></div>
+                            <div className="light"></div>
+                        </div>
+                        <div className="helix"></div>
+                        <div className="hat">
+                            <div className="leds-wrapper">
+                                <div className="periscope"></div>
+                                <div className="leds"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </ThemeProvider>
     );
 }
