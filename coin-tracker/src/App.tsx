@@ -34,18 +34,18 @@ const logoMap: { [key: string]: string } = {
 };
 
 export default function App() {
-    const [cryptos, setCryptos] = useState<Crypto[]>([]);
-    const [selectedCryptoIds, setSelectedCryptoIds] = useState<string[]>(availableCryptos.map(crypto => crypto.id));
+    const [cryptos, setCryptos] = useState<Crypto[]>([]); // Holds all fetched cryptos
+    const [selectedCryptoIds, setSelectedCryptoIds] = useState<string[]>(['bitcoin', 'ethereum', 'tether']); // Default to 3 cryptos
     const [error, setError] = useState<string | null>(null);
 
+    const [displayedCryptos, setDisplayedCryptos] = useState<Crypto[]>([]); // Holds the currently displayed 3 cryptos
+
     useEffect(() => {
+        // Fetch all available cryptocurrencies from the API
         const fetchCryptos = async () => {
             try {
                 const response = await axios.get('https://api.coincap.io/v2/assets');
-                const filteredCryptos = response.data.data
-                    .filter((crypto: Crypto) => selectedCryptoIds.includes(crypto.id))
-                    .sort((a: Crypto, b: Crypto) => a.rank - b.rank);
-                setCryptos(filteredCryptos);
+                setCryptos(response.data.data);
             } catch (error) {
                 setError('Error fetching data.');
                 console.error(error);
@@ -55,13 +55,19 @@ export default function App() {
         fetchCryptos();
         const interval = setInterval(fetchCryptos, 30000);
         return () => clearInterval(interval);
-    }, [selectedCryptoIds]);
+    }, []);
 
-    // Function to handle crypto change in the dropdown
+    useEffect(() => {
+        // Filter or fetch the specific selected cryptocurrencies when `selectedCryptoIds` changes
+        const filteredCryptos = cryptos.filter(crypto => selectedCryptoIds.includes(crypto.id));
+        setDisplayedCryptos(filteredCryptos);
+    }, [selectedCryptoIds, cryptos]);
+
+    // Function to handle crypto change in the dropdown for a specific card (index)
     const handleCryptoChange = (index: number, newCryptoId: string) => {
         const updatedCryptoIds = [...selectedCryptoIds];
-        updatedCryptoIds[index] = newCryptoId;
-        setSelectedCryptoIds(updatedCryptoIds);
+        updatedCryptoIds[index] = newCryptoId; // Change the selected crypto for the specific card
+        setSelectedCryptoIds(updatedCryptoIds); // Update the state
     };
 
     return (
@@ -75,34 +81,26 @@ export default function App() {
             <Container style={{ paddingTop: '20px' }}>
                 <Grid container spacing={3}>
                     {error && <p>{error}</p>}
-                    {cryptos.length === 0 ? (
+                    {displayedCryptos.length === 0 ? (
                         <p>No cryptocurrencies available.</p>
                     ) : (
-                        cryptos.map((crypto, index) => (
-                            <Grid item xs={12} sm={6} md={4} key={crypto.id}>
-                                <CryptoCard
-                                    name={crypto.name}
-                                    rank={crypto.rank}
-                                    priceUsd={Number(crypto.priceUsd).toFixed(2)}
-                                    changePercent24Hr={Number(crypto.changePercent24Hr).toFixed(2)}
-                                    logo={logoMap[crypto.id]}
-                                />
-                                <FormControl fullWidth>
-                                    <InputLabel id={`crypto-select-${index}`}>Select Crypto</InputLabel>
-                                    <Select
-                                        labelId={`crypto-select-${index}`}
-                                        value={selectedCryptoIds[index]}
-                                        onChange={(e) => handleCryptoChange(index, e.target.value as string)}
-                                    >
-                                        {availableCryptos.map((cryptoOption) => (
-                                            <MenuItem key={cryptoOption.id} value={cryptoOption.id}>
-                                                {cryptoOption.name}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                            </Grid>
-                        ))
+                        selectedCryptoIds.map((cryptoId, index) => {
+                            const crypto = cryptos.find(c => c.id === cryptoId);
+
+                            return crypto ? (
+                                <Grid item xs={12} sm={6} md={4} key={crypto.id}>
+                                    <CryptoCard
+                                        name={crypto.name}
+                                        rank={crypto.rank}
+                                        priceUsd={Number(crypto.priceUsd).toFixed(2)}
+                                        changePercent24Hr={Number(crypto.changePercent24Hr).toFixed(2)}
+                                        logo={logoMap[crypto.id]}
+                                        selectedCryptoId={selectedCryptoIds[index]} // Pass the selected crypto ID for the dropdown
+                                        onCryptoChange={(newCryptoId) => handleCryptoChange(index, newCryptoId)} // Handle dropdown change
+                                    />
+                                </Grid>
+                            ) : null;
+                        })
                     )}
                 </Grid>
                 <div className="sea">
